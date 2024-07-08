@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as FileSystem from 'expo-file-system'
 
-const Post = ({ data, index }) => {
+const Post = ({ data, index, navigation }) => {
   const [isLiked, setIsLiked] = useState(false)
   const [numLikes, setNumLikes] = useState(0)
   const [numComments, setNumComments] = useState(0)
@@ -32,6 +32,11 @@ const Post = ({ data, index }) => {
     await AsyncStorage.setItem('posts', JSON.stringify(posts))
   }
 
+  const seeComments = async () => {
+    console.log(index)
+    await navigation.navigate('CommentSection', { index: index })
+  }
+
   return (
     <View>
       <View style={styles.post}>
@@ -48,7 +53,7 @@ const Post = ({ data, index }) => {
             />
             <Text style={styles.likeText}>{`${numLikes} Hugs`}</Text>
           </Pressable>
-          <Pressable style={styles.commentButton}>
+          <Pressable style={styles.commentButton} onPress={() => seeComments()}>
             <Ionicons name="chatbox-ellipses" size={24} color="black" />
             <Text style={styles.likeText}>{`${numComments} Comments`}</Text>
           </Pressable>

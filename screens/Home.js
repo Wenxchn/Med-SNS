@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const data = require('../backend/data.json')
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [loadedPosts, setLoadedPosts] = useState([])
   const amountLoaded = useRef(0)
 
@@ -39,7 +39,9 @@ const Home = () => {
     <View style={styles.screen}>
       <FlatList
         data={loadedPosts}
-        renderItem={({ item, index }) => <Post data={item} index={index} />}
+        renderItem={({ item, index }) => (
+          <Post data={item} index={index} navigation={navigation} />
+        )}
         onEndReached={loadNextPosts}
         showsVerticalScrollIndicator={false}
       />

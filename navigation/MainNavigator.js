@@ -19,7 +19,8 @@ const MainNavigator = () => {
         name="CommentSection"
         component={CommentSection}
         options={({ route, navigation }) => ({
-          headerShown: false,
+          headerShown: true,
+          title: 'Comments',
         })}
       />
     </MainStack.Navigator>
