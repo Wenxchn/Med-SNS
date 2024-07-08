@@ -11,7 +11,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const loadInitialPosts = async () => {
-      await AsyncStorage.setItem('posts', JSON.stringify(data))
+      // await AsyncStorage.setItem('posts', JSON.stringify(data))
       let initialPosts = JSON.parse(await AsyncStorage.getItem('posts'))
       amountLoaded.current = 0
       setLoadedPosts([])
@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: '8%',
   },
 })
 

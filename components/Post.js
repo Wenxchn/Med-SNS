@@ -33,17 +33,18 @@ const Post = ({ data, index, navigation }) => {
   }
 
   const seeComments = async () => {
-    console.log(index)
     await navigation.navigate('CommentSection', { index: index })
   }
 
   return (
     <View>
       <View style={styles.post}>
-        <Text style={styles.title}>{data.title}</Text>
-        <Text style={styles.description} numberOfLines={3}>
-          {data.patient_description}
-        </Text>
+        <Pressable onPress={() => seeComments()}>
+          <Text style={styles.title}>{data.title}</Text>
+          <Text style={styles.description} numberOfLines={3}>
+            {data.patient_description}
+          </Text>
+        </Pressable>
         <View style={styles.buttonContainer}>
           <Pressable style={styles.likeButton} onPress={() => updateNumLikes()}>
             <Ionicons
@@ -54,7 +55,7 @@ const Post = ({ data, index, navigation }) => {
             <Text style={styles.likeText}>{`${numLikes} Hugs`}</Text>
           </Pressable>
           <Pressable style={styles.commentButton} onPress={() => seeComments()}>
-            <Ionicons name="chatbox-ellipses" size={24} color="black" />
+            <Ionicons name="chatbox-ellipses" size={24} color={'black'} />
             <Text style={styles.likeText}>{`${numComments} Comments`}</Text>
           </Pressable>
         </View>
