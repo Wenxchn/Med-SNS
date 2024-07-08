@@ -8,14 +8,17 @@ import * as FileSystem from 'expo-file-system'
 const Post = ({ data, index }) => {
   const [isLiked, setIsLiked] = useState(false)
   const [numLikes, setNumLikes] = useState(0)
+  const [numComments, setNumComments] = useState(0)
 
   useEffect(() => {
-    const test = async () => {
+    const init = async () => {
       const backend = await AsyncStorage.getItem('posts')
       const currentPost = JSON.parse(backend)[index]
       setNumLikes(currentPost.num_hugs)
+      const numComments = Object.values(currentPost.comments).length
+      setNumComments(numComments)
     }
-    test()
+    init()
   }, [])
 
   const updateNumLikes = async () => {
@@ -36,7 +39,7 @@ const Post = ({ data, index }) => {
         <Text style={styles.description} numberOfLines={3}>
           {data.patient_description}
         </Text>
-        <View>
+        <View style={styles.buttonContainer}>
           <Pressable style={styles.likeButton} onPress={() => updateNumLikes()}>
             <Ionicons
               name="heart"
@@ -44,6 +47,10 @@ const Post = ({ data, index }) => {
               color={isLiked ? COLORS.customPink : COLORS.customGrey}
             />
             <Text style={styles.likeText}>{`${numLikes} Hugs`}</Text>
+          </Pressable>
+          <Pressable style={styles.commentButton}>
+            <Ionicons name="chatbox-ellipses" size={24} color="black" />
+            <Text style={styles.likeText}>{`${numComments} Comments`}</Text>
           </Pressable>
         </View>
       </View>
@@ -67,6 +74,10 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 10,
   },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   likeButton: {
     flex: 1,
     flexDirection: 'row',
@@ -74,6 +85,12 @@ const styles = StyleSheet.create({
     maxWidth: '30%',
   },
   likeText: { marginLeft: 5 },
+  commentButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    maxWidth: '40%',
+  },
   divider: {
     borderBottomWidth: 2,
     borderBottomColor: COLORS.customGrey,
