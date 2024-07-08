@@ -1,5 +1,4 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import COLORS from '../constants/Colors'
 import Post from '../components/Post'
 import { useEffect, useRef, useState } from 'react'
 
