@@ -2,11 +2,33 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import COLORS from '../constants/Colors'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as FileSystem from 'expo-file-system'
 
-const Post = ({ data }) => {
+const Post = ({ data, index }) => {
   const [isLiked, setIsLiked] = useState(false)
   const [numLikes, setNumLikes] = useState(0)
-  useEffect(() => {}, [])
+
+  useEffect(() => {
+    const test = async () => {
+      const backend = await AsyncStorage.getItem('posts')
+      const currentPost = JSON.parse(backend)[index]
+      setNumLikes(currentPost.num_hugs)
+    }
+    test()
+  }, [])
+
+  const updateNumLikes = async () => {
+    const backend = await AsyncStorage.getItem('posts')
+    let posts = JSON.parse(backend)
+    let currentPost = posts[index]
+    currentPost.num_hugs = currentPost.num_hugs + 1
+    setIsLiked(true)
+    setNumLikes(currentPost.num_hugs)
+    posts[index] = currentPost
+    await AsyncStorage.setItem('posts', JSON.stringify(posts))
+  }
+
   return (
     <View>
       <View style={styles.post}>
@@ -15,10 +37,7 @@ const Post = ({ data }) => {
           {data.patient_description}
         </Text>
         <View>
-          <Pressable
-            style={styles.likeButton}
-            onPress={() => setIsLiked(!isLiked)}
-          >
+          <Pressable style={styles.likeButton} onPress={() => updateNumLikes()}>
             <Ionicons
               name="heart"
               size={24}
