@@ -12,28 +12,34 @@ const Post = ({ data, index, navigation }) => {
 
   useEffect(() => {
     const init = async () => {
-      const backend = await AsyncStorage.getItem('posts')
-      const currentPost = JSON.parse(backend)[index]
-      setNumLikes(currentPost.num_hugs)
-      const numComments = Object.values(currentPost.comments).length
-      setNumComments(numComments)
+      try {
+        const backend = await AsyncStorage.getItem('posts')
+        const currentPost = JSON.parse(backend)[index]
+        setNumLikes(currentPost.num_hugs)
+        const numComments = Object.values(currentPost.comments).length
+        setNumComments(numComments)
+      } catch (e) {}
     }
     init()
   }, [])
 
   const updateNumLikes = async () => {
-    const backend = await AsyncStorage.getItem('posts')
-    let posts = JSON.parse(backend)
-    let currentPost = posts[index]
-    currentPost.num_hugs = currentPost.num_hugs + 1
-    setIsLiked(true)
-    setNumLikes(currentPost.num_hugs)
-    posts[index] = currentPost
-    await AsyncStorage.setItem('posts', JSON.stringify(posts))
+    try {
+      const backend = await AsyncStorage.getItem('posts')
+      let posts = JSON.parse(backend)
+      let currentPost = posts[index]
+      currentPost.num_hugs = currentPost.num_hugs + 1
+      setIsLiked(true)
+      setNumLikes(currentPost.num_hugs)
+      posts[index] = currentPost
+      await AsyncStorage.setItem('posts', JSON.stringify(posts))
+    } catch (e) {}
   }
 
   const seeComments = async () => {
-    await navigation.navigate('CommentSection', { index: index })
+    try {
+      await navigation.navigate('CommentSection', { index: index })
+    } catch (e) {}
   }
 
   return (

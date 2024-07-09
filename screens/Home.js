@@ -11,28 +11,36 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const loadInitialPosts = async () => {
-      // await AsyncStorage.setItem('posts', JSON.stringify(data))
-      let initialPosts = JSON.parse(await AsyncStorage.getItem('posts'))
-      amountLoaded.current = 0
-      setLoadedPosts([])
-      for (let i = 0; i < 10; i++) {
-        setLoadedPosts((prev) => [...prev, initialPosts[i]])
-        amountLoaded.current = i + 1
-      }
+      try {
+        const hasPosts = await AsyncStorage.getItem('posts')
+        if (!hasPosts) {
+          await AsyncStorage.setItem('posts', JSON.stringify(data))
+        }
+
+        let initialPosts = JSON.parse(await AsyncStorage.getItem('posts'))
+        amountLoaded.current = 0
+        setLoadedPosts([])
+        for (let i = 0; i < 10; i++) {
+          setLoadedPosts((prev) => [...prev, initialPosts[i]])
+          amountLoaded.current = i + 1
+        }
+      } catch (e) {}
     }
     loadInitialPosts()
   }, [])
 
   const loadNextPosts = async () => {
-    const lastAmountLoaded = amountLoaded.current
-    const posts = JSON.parse(await AsyncStorage.getItem('posts'))
-    for (let i = amountLoaded.current; i < lastAmountLoaded + 10; i++) {
-      if (!posts[i]) {
-        break
+    try {
+      const lastAmountLoaded = amountLoaded.current
+      const posts = JSON.parse(await AsyncStorage.getItem('posts'))
+      for (let i = amountLoaded.current; i < lastAmountLoaded + 10; i++) {
+        if (!posts[i]) {
+          break
+        }
+        setLoadedPosts((prev) => [...prev, posts[i]])
+        amountLoaded.current = i + 1
       }
-      setLoadedPosts((prev) => [...prev, posts[i]])
-      amountLoaded.current = i + 1
-    }
+    } catch (e) {}
   }
 
   return (

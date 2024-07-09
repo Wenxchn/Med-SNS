@@ -9,18 +9,20 @@ const Comment = ({ data, postIndex }) => {
 
   useEffect(() => {
     const init = async () => {
-      const backend = await AsyncStorage.getItem('posts')
-      const currentPost = JSON.parse(backend)[postIndex]
-      let commentArr = Object.values(currentPost.comments)
-      let filteredCommentsArr = commentArr.filter(
-        (comment) => comment.parent_id === data.id
-      )
-      for (let i = 0; i < 10; i++) {
-        if (!filteredCommentsArr[i]) {
-          break
+      try {
+        const backend = await AsyncStorage.getItem('posts')
+        const currentPost = JSON.parse(backend)[postIndex]
+        let commentArr = Object.values(currentPost.comments)
+        let filteredCommentsArr = commentArr.filter(
+          (comment) => comment.parent_id === data.id
+        )
+        for (let i = 0; i < 10; i++) {
+          if (!filteredCommentsArr[i]) {
+            break
+          }
+          setLoadedReplies((prev) => [...prev, filteredCommentsArr[i]])
         }
-        setLoadedReplies((prev) => [...prev, filteredCommentsArr[i]])
-      }
+      } catch (e) {}
     }
     init()
   }, [])

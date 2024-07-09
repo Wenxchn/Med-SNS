@@ -11,22 +11,24 @@ const CommentSection = ({ route }) => {
 
   useEffect(() => {
     const init = async () => {
-      setLoadedComments([])
-      const index = route.params.index
-      const backend = await AsyncStorage.getItem('posts')
-      const currentPost = JSON.parse(backend)[index]
-      setTitle(currentPost.title)
-      setDescription(currentPost.patient_description)
-      let commentArr = Object.values(currentPost.comments)
-      for (let i = 0; i < 10; i++) {
-        if (!commentArr[i]) {
-          break
-        }
+      try {
+        setLoadedComments([])
+        const index = route.params.index
+        const backend = await AsyncStorage.getItem('posts')
+        const currentPost = JSON.parse(backend)[index]
+        setTitle(currentPost.title)
+        setDescription(currentPost.patient_description)
+        let commentArr = Object.values(currentPost.comments)
+        for (let i = 0; i < 10; i++) {
+          if (!commentArr[i]) {
+            break
+          }
 
-        if (commentArr[i].parent_id === null) {
-          setLoadedComments((prev) => [...prev, commentArr[i]])
+          if (commentArr[i].parent_id === null) {
+            setLoadedComments((prev) => [...prev, commentArr[i]])
+          }
         }
-      }
+      } catch (e) {}
     }
     init()
   }, [])
